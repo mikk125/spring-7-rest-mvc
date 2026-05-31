@@ -1,5 +1,7 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
+import guru.springframework.spring7restmvc.common.exception.NotFoundException;
+import guru.springframework.spring7restmvc.domain.beer.BeerController;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,6 +18,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import javax.print.attribute.standard.Media;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +61,9 @@ public class CustomerControllerTest {
 
     @MockitoBean
     DeleteCustomerByIdFeature deleteCustomerByIdFeature;
+
+    @MockitoBean
+    FindCustomerByIdFeature findCustomerByIdFeature;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -127,6 +133,38 @@ public class CustomerControllerTest {
                 .andExpect(jsonPath("$.name", is(customer.getName())));
 
         //System.out.println(customerController.getCustomerById(UUID.randomUUID()));
+    }
+
+    @Test
+    void getCustomerByIdNotFound() throws Exception {
+        given(getCustomerByIdFeature.execute(any(UUID.class))).willThrow(NotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findCustomerById() throws Exception {
+        Customer customer = Customer.builder().id(UUID.randomUUID()).build();
+
+        given(findCustomerByIdFeature.execute(customer.getId())).willReturn(Optional.of(customer));
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_FIND, customer.getId())
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(String.valueOf(MediaType.APPLICATION_JSON)))
+                .andExpect(jsonPath("$.id", is(customer.getId().toString())))
+                .andExpect(jsonPath("$.name", is(customer.getName())));
+
+        //System.out.println(customerController.getCustomerById(UUID.randomUUID()));
+    }
+
+    @Test
+    void findCustomerByIdNotFound() throws Exception {
+        given(findCustomerByIdFeature.execute(any(UUID.class))).willThrow(NotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_FIND, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
+import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,6 +17,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import javax.print.attribute.standard.Media;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +60,9 @@ public class BeerControllerTest {
 
     @MockitoBean
     DeleteBeerByIdFeature deleteBeerByIdFeature;
+
+    @MockitoBean
+    private FindBeerByIdFeature findBeerByIdFeature;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -127,6 +132,38 @@ public class BeerControllerTest {
                 .andExpect(jsonPath("$.beerName", is(beer.getBeerName())));
 
         //System.out.println(beerController.getBeerById(UUID.randomUUID()));
+    }
+
+    @Test
+    void getBeerByIdNotFound() throws Exception {
+        given(getBeerByIdFeature.execute(any(UUID.class))).willThrow(NotFoundException.class);
+
+        mockMvc.perform(get(BeerController.BEER_PATH_ID, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findBeerById() throws Exception {
+        Beer beer = Beer.builder().id(UUID.randomUUID()).build();
+
+        given(findBeerByIdFeature.execute(beer.getId())).willReturn(Optional.of(beer));
+
+        mockMvc.perform(get(BeerController.BEER_PATH_FIND, beer.getId())
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(String.valueOf(MediaType.APPLICATION_JSON)))
+                .andExpect(jsonPath("$.id", is(beer.getId().toString())))
+                .andExpect(jsonPath("$.beerName", is(beer.getBeerName())));
+
+        //System.out.println(beerController.getBeerById(UUID.randomUUID()));
+    }
+
+    @Test
+    void findBeerByIdNotFound() throws Exception {
+        given(findBeerByIdFeature.execute(any(UUID.class))).willReturn(Optional.empty());
+
+        mockMvc.perform(get(BeerController.BEER_PATH_FIND, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 
     @Test

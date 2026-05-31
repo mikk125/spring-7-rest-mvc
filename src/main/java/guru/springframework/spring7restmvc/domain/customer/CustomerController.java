@@ -1,5 +1,7 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
+import guru.springframework.spring7restmvc.common.exception.NotFoundException;
+import guru.springframework.spring7restmvc.domain.beer.Beer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +19,10 @@ public class CustomerController {
 
     public static final String CUSTOMER_PATH = "/api/v1/customer";
     public static final String CUSTOMER_PATH_ID = "/api/v1/customer" + "/{id}";
+    public static final String CUSTOMER_PATH_FIND = CUSTOMER_PATH_ID + "/find";
 
     private final GetCustomerByIdFeature getCustomerByIdFeature;
+    private final FindCustomerByIdFeature findCustomerByIdFeature;
     private final GetAllCustomerFeature getAllCustomerFeature;
     private final SaveCustomerFeature saveCustomerFeature;
     private final UpdateCustomerByIdFeature updateCustomerByIdFeature;
@@ -48,6 +52,13 @@ public class CustomerController {
     @GetMapping(value = CUSTOMER_PATH)
     public List<Customer> listCustomers() {
         return getAllCustomerFeature.execute();
+    }
+
+    @GetMapping(CUSTOMER_PATH_FIND)
+    public Customer findCustomerById(@PathVariable("id") UUID id) {
+        log.debug("Find customer by id was called in constructor");
+
+        return findCustomerByIdFeature.execute(id).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping(value = CUSTOMER_PATH_ID)
