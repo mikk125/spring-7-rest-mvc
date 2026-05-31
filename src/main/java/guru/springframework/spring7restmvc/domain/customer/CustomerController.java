@@ -13,8 +13,10 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/customer")
 public class CustomerController {
+
+    public static final String CUSTOMER_PATH = "/api/v1/customer";
+    public static final String CUSTOMER_PATH_ID = "/api/v1/customer" + "/{id}";
 
     private final GetCustomerByIdFeature getCustomerByIdFeature;
     private final GetAllCustomerFeature getAllCustomerFeature;
@@ -22,33 +24,33 @@ public class CustomerController {
     private final UpdateCustomerByIdFeature updateCustomerByIdFeature;
     private final DeleteCustomerByIdFeature deleteCustomerByIdFeature;
 
-    @PostMapping
+    @PostMapping(CUSTOMER_PATH)
     public ResponseEntity<Customer> handlePost(@RequestBody  Customer customer) {
         Customer savedCustomer = saveCustomerFeature.execute(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(savedCustomer, headers, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = CUSTOMER_PATH_ID)
     public ResponseEntity<Customer> handleDelete(@PathVariable("id") UUID id) {
         deleteCustomerByIdFeature.execute(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = CUSTOMER_PATH_ID)
     public ResponseEntity<Customer> handlePut(@PathVariable("id") UUID id, @RequestBody Customer customer) {
         updateCustomerByIdFeature.execute(id, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping(value = CUSTOMER_PATH)
     public List<Customer> listCustomers() {
         return getAllCustomerFeature.execute();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = CUSTOMER_PATH_ID)
     public Customer getCustomerById(@PathVariable("id") UUID id) {
         log.debug("Get customer by id was called in constructor");
 
