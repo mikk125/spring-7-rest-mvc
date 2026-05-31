@@ -1,6 +1,8 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
+import guru.springframework.spring7restmvc.domain.customer.CustomerController;
+import guru.springframework.spring7restmvc.domain.customer.CustomerDTO;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -173,6 +176,25 @@ public class CustomerControllerTest {
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_FIND, UUID.randomUUID()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testCreateCustomerNullCustomerName() throws Exception {
+        CustomerDTO customerDTO = CustomerDTO.builder().build();
+
+        CustomerDTO savedCustomer = CustomerDTO.builder()
+                        .name("Alice")
+                                .build();
+
+        given(saveCustomerFeature.execute(any())).willReturn(savedCustomer);
+
+        MvcResult mvcResult = mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON))
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerDTO)))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
     }
 
     @Test

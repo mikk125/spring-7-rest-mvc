@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class BeerController {
     private final DeleteBeerByIdJpaFeature deleteBeerByIdFeature;
 
     @PostMapping(BEER_PATH)
-    public ResponseEntity<BeerDTO> handlePost(@RequestBody BeerDTO beer) {
+    public ResponseEntity<BeerDTO> handlePost(@Validated @RequestBody BeerDTO beer) {
         BeerDTO savedBeer = saveBeerFeature.execute(beer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + savedBeer.getId().toString());
@@ -53,7 +54,7 @@ public class BeerController {
     }
 
     @PutMapping(value = BEER_PATH_ID)
-    public ResponseEntity<BeerDTO> handlePut(@PathVariable("id") UUID id, @RequestBody BeerDTO beer) {
+    public ResponseEntity<BeerDTO> handlePut(@PathVariable("id") UUID id, @Validated @RequestBody BeerDTO beer) {
         if (updateBeerByIdFeature.execute(id, beer).isEmpty()) {
             throw new NotFoundException();
         }

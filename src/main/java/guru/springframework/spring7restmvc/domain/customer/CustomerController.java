@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriBuilder;
 
@@ -36,7 +37,7 @@ public class CustomerController {
     private final DeleteCustomerByIdJpaFeature deleteCustomerByIdFeature;
 
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity<CustomerDTO> handlePost(@RequestBody CustomerDTO customer) {
+    public ResponseEntity<CustomerDTO> handlePost(@Validated  @RequestBody CustomerDTO customer) {
         CustomerDTO savedCustomer = saveCustomerFeature.execute(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", CustomerController.CUSTOMER_PATH + "/" + savedCustomer.getId().toString());

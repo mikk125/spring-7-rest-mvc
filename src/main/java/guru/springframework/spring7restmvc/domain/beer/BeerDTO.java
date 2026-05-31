@@ -1,5 +1,7 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,9 @@ public class BeerDTO {
 
     private UUID id;
     private Integer version;
+
+    @NotBlank
+    @NotNull
     private String beerName;
     private BeerStyle beerStyle;
     private String upc;

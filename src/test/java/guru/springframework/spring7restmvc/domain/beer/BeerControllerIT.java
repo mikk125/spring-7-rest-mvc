@@ -2,12 +2,14 @@ package guru.springframework.spring7restmvc.domain.beer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +28,16 @@ public class BeerControllerIT {
     BeerRepository beerRepository;
     @Autowired
     private BeerMapper beerMapper;
+
+//    @Autowired
+//    WebApplicationContext wac;
+
+//    MockMvc mockMvc;
+//
+//    @BeforeEach
+//    void setUp() {
+//        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+//    }
 
     @Test
     void deleteByIdNotFoundTest() {

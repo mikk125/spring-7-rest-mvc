@@ -1,6 +1,9 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.IdGeneratorType;
@@ -26,6 +29,11 @@ public class Customer {
 
     @Version
     private Integer version;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50)
     private String name;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

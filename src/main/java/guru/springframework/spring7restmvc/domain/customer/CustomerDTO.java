@@ -1,5 +1,7 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,9 @@ import java.util.UUID;
 public class CustomerDTO {
     private UUID id;
     private Integer version;
+
+    @NotBlank
+    @NotNull
     private String name;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

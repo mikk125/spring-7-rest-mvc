@@ -1,6 +1,7 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
+import guru.springframework.spring7restmvc.domain.customer.CustomerController;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -8,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import tools.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.MediaType;
 
 import java.util.List;
 import java.util.Optional;
@@ -86,9 +90,9 @@ public class BeerControllerTest {
         given(saveBeerFeature.execute(any(BeerDTO.class))).willReturn(beer);
 
         mockMvc.perform(post(BeerController.BEER_PATH)
-                        .accept(String.valueOf(MediaType.APPLICATION_JSON))
-                        .contentType(String.valueOf(MediaType.APPLICATION_JSON))
-                        .content(objectMapper.writeValueAsString(beer)))
+                .accept(String.valueOf(MediaType.APPLICATION_JSON))
+                .contentType(String.valueOf(MediaType.APPLICATION_JSON))
+                .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
@@ -173,6 +177,27 @@ public class BeerControllerTest {
 
         mockMvc.perform(get(BeerController.BEER_PATH_FIND, UUID.randomUUID()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testCreateBeerNullBeerName() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().build();
+
+        BeerDTO savedBeer = BeerDTO.builder()
+                .id(UUID.randomUUID())
+                .beerName("Saku")
+                .build();
+
+        given(saveBeerFeature.execute(any())).willReturn(savedBeer);
+
+        MvcResult mockMvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON))
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(2))).andReturn();
+
+        System.out.println(mockMvcResult.getResponse().getContentAsString());
     }
 
     @Test

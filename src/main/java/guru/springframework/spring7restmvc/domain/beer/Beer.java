@@ -1,10 +1,14 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.IdGeneratorType;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,6 +31,11 @@ public class Beer {
 
     @Version
     private Integer version;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50)
     private String beerName;
     private BeerStyle beerStyle;
     private String upc;
