@@ -11,14 +11,14 @@ import java.util.UUID;
 @Service
 public class UpdateCustomerByIdFeature {
 
-    private Map<UUID, Customer> customers;
+    private Map<UUID, CustomerDTO> customers;
 
     public UpdateCustomerByIdFeature() {
         this.customers = new HashMap<>();
     }
 
-    public void execute(UUID id, Customer customer) {
-        Customer existing = customers.get(id);
+    public void execute(UUID id, CustomerDTO customer) {
+        CustomerDTO existing = customers.get(id);
 
         existing.setName(customer.getName());
         existing.setVersion(customer.getVersion());

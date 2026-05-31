@@ -1,7 +1,6 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
-import guru.springframework.spring7restmvc.domain.beer.Beer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -29,8 +28,8 @@ public class CustomerController {
     private final DeleteCustomerByIdFeature deleteCustomerByIdFeature;
 
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity<Customer> handlePost(@RequestBody  Customer customer) {
-        Customer savedCustomer = saveCustomerFeature.execute(customer);
+    public ResponseEntity<CustomerDTO> handlePost(@RequestBody CustomerDTO customer) {
+        CustomerDTO savedCustomer = saveCustomerFeature.execute(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
 
@@ -38,31 +37,31 @@ public class CustomerController {
     }
 
     @DeleteMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity<Customer> handleDelete(@PathVariable("id") UUID id) {
+    public ResponseEntity<CustomerDTO> handleDelete(@PathVariable("id") UUID id) {
         deleteCustomerByIdFeature.execute(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity<Customer> handlePut(@PathVariable("id") UUID id, @RequestBody Customer customer) {
+    public ResponseEntity<CustomerDTO> handlePut(@PathVariable("id") UUID id, @RequestBody CustomerDTO customer) {
         updateCustomerByIdFeature.execute(id, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = CUSTOMER_PATH)
-    public List<Customer> listCustomers() {
+    public List<CustomerDTO> listCustomers() {
         return getAllCustomerFeature.execute();
     }
 
     @GetMapping(CUSTOMER_PATH_FIND)
-    public Customer findCustomerById(@PathVariable("id") UUID id) {
+    public CustomerDTO findCustomerById(@PathVariable("id") UUID id) {
         log.debug("Find customer by id was called in constructor");
 
         return findCustomerByIdFeature.execute(id).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping(value = CUSTOMER_PATH_ID)
-    public Customer getCustomerById(@PathVariable("id") UUID id) {
+    public CustomerDTO getCustomerById(@PathVariable("id") UUID id) {
         log.debug("Get customer by id was called in constructor");
 
         return getCustomerByIdFeature.execute(id);

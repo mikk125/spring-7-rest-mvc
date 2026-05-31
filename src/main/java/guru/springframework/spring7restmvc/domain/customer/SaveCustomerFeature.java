@@ -1,6 +1,5 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
-import guru.springframework.spring7restmvc.domain.customer.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +12,14 @@ import java.util.UUID;
 @Service
 public class SaveCustomerFeature {
 
-    private Map<UUID, Customer> customers;
+    private Map<UUID, CustomerDTO> customers;
 
     public SaveCustomerFeature() {
         this.customers = new HashMap<>();
     }
 
-    public Customer execute(Customer customer) {
-        Customer savedCustomer = Customer.builder()
+    public CustomerDTO execute(CustomerDTO customer) {
+        CustomerDTO savedCustomer = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(customer.getVersion())
                 .name(customer.getName())

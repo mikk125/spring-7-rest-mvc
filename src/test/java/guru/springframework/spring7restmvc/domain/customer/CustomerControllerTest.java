@@ -1,22 +1,15 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
-import guru.springframework.spring7restmvc.domain.beer.BeerController;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriTemplate;
 import tools.jackson.databind.ObjectMapper;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -70,16 +63,16 @@ public class CustomerControllerTest {
 
     @Test
     void testCreateCustomer() {
-        Customer customer = Customer.builder().id(UUID.randomUUID()).build();
+        CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).build();
 
         System.out.println(objectMapper.writeValueAsString(customer));
     }
 
     @Test
     void testCreateNewCustomer() throws Exception {
-        Customer customer = Customer.builder().id(UUID.randomUUID()).name("Robert Alice").build();
+        CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).name("Robert Alice").build();
 
-        given(saveCustomerFeature.execute(any(Customer.class))).willReturn(customer);
+        given(saveCustomerFeature.execute(any(CustomerDTO.class))).willReturn(customer);
 
         mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                         .accept(String.valueOf(MediaType.APPLICATION_JSON))
@@ -92,7 +85,7 @@ public class CustomerControllerTest {
     @Test
     void testUpdateCustomer() throws Exception {
         UUID id = UUID.randomUUID();
-        Customer customer = Customer.builder().id(id).name("Robert Alice").build();
+        CustomerDTO customer = CustomerDTO.builder().id(id).name("Robert Alice").build();
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(String.valueOf(MediaType.APPLICATION_JSON))
@@ -105,7 +98,7 @@ public class CustomerControllerTest {
 
     @Test
     void testDeleteCustomer() throws Exception {
-        Customer customer = Customer.builder().id(UUID.randomUUID()).build();
+        CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).build();
 
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(String.valueOf(MediaType.APPLICATION_JSON)))
@@ -121,7 +114,7 @@ public class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        Customer customer = Customer.builder().id(UUID.randomUUID()).build();
+        CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).build();
 
         given(getCustomerByIdFeature.execute(customer.getId())).willReturn(customer);
 
@@ -145,7 +138,7 @@ public class CustomerControllerTest {
 
     @Test
     void findCustomerById() throws Exception {
-        Customer customer = Customer.builder().id(UUID.randomUUID()).build();
+        CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).build();
 
         given(findCustomerByIdFeature.execute(customer.getId())).willReturn(Optional.of(customer));
 
@@ -169,7 +162,7 @@ public class CustomerControllerTest {
 
     @Test
     void getAllCustomer() throws Exception {
-        Customer customer = Customer.builder().id(UUID.randomUUID()).build();
+        CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).build();
 
         given(getAllCustomerFeature.execute()).willReturn(List.of(customer));
 

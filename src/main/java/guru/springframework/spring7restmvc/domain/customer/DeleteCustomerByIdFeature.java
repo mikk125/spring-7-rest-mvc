@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class DeleteCustomerByIdFeature {
 
-    private Map<UUID, Customer> customers;
+    private Map<UUID, CustomerDTO> customers;
 
     public DeleteCustomerByIdFeature() {
         this.customers = new HashMap<>();

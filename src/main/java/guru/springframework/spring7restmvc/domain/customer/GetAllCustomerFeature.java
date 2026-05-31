@@ -1,12 +1,9 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 
-import guru.springframework.spring7restmvc.domain.beer.Beer;
-import guru.springframework.spring7restmvc.domain.beer.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -14,14 +11,14 @@ import java.util.*;
 @Service
 public class GetAllCustomerFeature {
 
-    private Map<UUID, Customer> customers;
+    private Map<UUID, CustomerDTO> customers;
 
     public GetAllCustomerFeature() {
         this.customers = new HashMap<>();
     }
 
-    public List<Customer> execute() {
-        Customer customer1 = Customer.builder()
+    public List<CustomerDTO> execute() {
+        CustomerDTO customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .name("Maiki")

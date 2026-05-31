@@ -1,7 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
-import guru.springframework.spring7restmvc.domain.customer.Customer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -30,8 +28,8 @@ public class BeerController {
     private final DeleteBeerByIdFeature deleteBeerByIdFeature;
 
     @PostMapping(BEER_PATH)
-    public ResponseEntity<Beer> handlePost(@RequestBody  Beer beer) {
-        Beer savedBeer = saveBeerFeature.execute(beer);
+    public ResponseEntity<BeerDTO> handlePost(@RequestBody BeerDTO beer) {
+        BeerDTO savedBeer = saveBeerFeature.execute(beer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BeerController.BEER_PATH_ID + savedBeer.getId().toString());
 
@@ -39,32 +37,32 @@ public class BeerController {
     }
 
     @DeleteMapping(value = BEER_PATH_ID)
-    public ResponseEntity<Beer> handleDelete(@PathVariable("id") UUID id) {
+    public ResponseEntity<BeerDTO> handleDelete(@PathVariable("id") UUID id) {
         deleteBeerByIdFeature.execute(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(value = BEER_PATH_ID)
-    public ResponseEntity<Beer> handlePut(@PathVariable("id") UUID id, @RequestBody Beer beer) {
+    public ResponseEntity<BeerDTO> handlePut(@PathVariable("id") UUID id, @RequestBody BeerDTO beer) {
         updateBeerByIdFeature.execute(id, beer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
     @GetMapping(value = BEER_PATH)
-    public List<Beer> listBeers() {
+    public List<BeerDTO> listBeers() {
         return getAllBeerFeature.execute();
     }
 
     @GetMapping(BEER_PATH_FIND)
-    public Beer findBeerById(@PathVariable("id") UUID id) {
+    public BeerDTO findBeerById(@PathVariable("id") UUID id) {
         log.debug("Find beer by id was called in constructor");
 
         return findBeerByIdFeature.execute(id).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping(value = BEER_PATH_ID)
-    public Beer getBeerById(@PathVariable("id") UUID id) {
+    public BeerDTO getBeerById(@PathVariable("id") UUID id) {
         log.debug("Get beer by id was called in constructor");
 
         return getBeerByIdFeature.execute(id);

@@ -1,6 +1,5 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
-import guru.springframework.spring7restmvc.domain.customer.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import java.util.UUID;
 @Service
 public class DeleteBeerByIdFeature {
 
-    private Map<UUID, Beer> beers;
+    private Map<UUID, BeerDTO> beers;
 
     public DeleteBeerByIdFeature() {
         this.beers = new HashMap<>();

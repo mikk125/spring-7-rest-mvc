@@ -11,14 +11,14 @@ import java.util.*;
 @Service
 public class GetAllBeerFeature {
 
-    private Map<UUID, Beer> beers;
+    private Map<UUID, BeerDTO> beers;
 
     public GetAllBeerFeature() {
         this.beers = new HashMap<>();
     }
 
-    public List<Beer> execute() {
-        Beer beer1 = Beer.builder()
+    public List<BeerDTO> execute() {
+        BeerDTO beer1 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Galaxsy Cat")

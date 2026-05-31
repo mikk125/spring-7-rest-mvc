@@ -9,13 +9,13 @@ import java.util.*;
 @Service
 public class GetBeerByIdFeature {
 
-    private Map<UUID, Beer> beers;
+    private Map<UUID, BeerDTO> beers;
 
     public GetBeerByIdFeature() {
         this.beers = new HashMap<>();
     }
 
-    public Beer execute(UUID id) {
+    public BeerDTO execute(UUID id) {
         log.debug("Getting beer by id feature was called");
 
         return beers.get(id);

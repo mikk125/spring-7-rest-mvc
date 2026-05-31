@@ -5,17 +5,11 @@ import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriTemplate;
 import tools.jackson.databind.ObjectMapper;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,16 +63,16 @@ public class BeerControllerTest {
 
     @Test
     void testCreateBeer() {
-        Beer beer = Beer.builder().id(UUID.randomUUID()).build();
+        BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
         System.out.println(objectMapper.writeValueAsString(beer));
     }
 
     @Test
     void testCreateNewBeer() throws Exception {
-        Beer beer = Beer.builder().id(UUID.randomUUID()).beerName("Saku").build();
+        BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).beerName("Saku").build();
 
-        given(saveBeerFeature.execute(any(Beer.class))).willReturn(beer);
+        given(saveBeerFeature.execute(any(BeerDTO.class))).willReturn(beer);
 
         mockMvc.perform(post(BeerController.BEER_PATH)
                 .accept(String.valueOf(MediaType.APPLICATION_JSON))
@@ -91,7 +85,7 @@ public class BeerControllerTest {
     @Test
     void testUpdateBeer() throws Exception {
         UUID id = UUID.randomUUID();
-        Beer beer = Beer.builder().id(id).beerName("Saku").build();
+        BeerDTO beer = BeerDTO.builder().id(id).beerName("Saku").build();
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(String.valueOf(MediaType.APPLICATION_JSON))
@@ -104,7 +98,7 @@ public class BeerControllerTest {
 
     @Test
     void testDeleteBeer() throws Exception {
-        Beer beer = Beer.builder().id(UUID.randomUUID()).build();
+        BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                 .accept(String.valueOf(MediaType.APPLICATION_JSON)))
@@ -120,7 +114,7 @@ public class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        Beer beer = Beer.builder().id(UUID.randomUUID()).build();
+        BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
         given(getBeerByIdFeature.execute(beer.getId())).willReturn(beer);
 
@@ -144,7 +138,7 @@ public class BeerControllerTest {
 
     @Test
     void findBeerById() throws Exception {
-        Beer beer = Beer.builder().id(UUID.randomUUID()).build();
+        BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
         given(findBeerByIdFeature.execute(beer.getId())).willReturn(Optional.of(beer));
 
@@ -168,7 +162,7 @@ public class BeerControllerTest {
 
     @Test
     void getAllBeer() throws Exception {
-        Beer beer = Beer.builder().id(UUID.randomUUID()).build();
+        BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
         given(getAllBeerFeature.execute()).willReturn(List.of(beer));
 

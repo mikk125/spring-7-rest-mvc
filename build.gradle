@@ -8,6 +8,11 @@ group = 'guru.springframework'
 version = '0.0.1-SNAPSHOT'
 description = 'spring-7-rest-mvc'
 
+ext {
+    mapstructVersion = '1.5.2.Final'
+    lombokVersion = '1.18.38'
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
@@ -19,14 +24,27 @@ repositories {
 }
 
 dependencies {
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-devtools'
     compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-parameters'
+    ]
 }
 
 tasks.named('test') {

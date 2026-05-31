@@ -12,13 +12,13 @@ import java.util.UUID;
 @Service
 public class FindCustomerByIdFeature {
 
-    private Map<UUID, Customer> customers;
+    private Map<UUID, CustomerDTO> customers;
 
     public FindCustomerByIdFeature() {
         this.customers = new HashMap<>();
     }
 
-    public Optional<Customer> execute(UUID id) {
+    public Optional<CustomerDTO> execute(UUID id) {
         log.debug("Finding customer by id feature was called");
 
         return Optional.of(customers.get(id));
