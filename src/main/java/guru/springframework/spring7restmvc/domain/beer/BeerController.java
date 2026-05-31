@@ -20,31 +20,43 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{id}";
     public static final String BEER_PATH_FIND = BEER_PATH_ID + "/find";
 
-    private final GetBeerByIdFeature getBeerByIdFeature;
-    private final FindBeerByIdFeature findBeerByIdFeature;
-    private final GetAllBeerFeature getAllBeerFeature;
-    private final SaveBeerFeature saveBeerFeature;
-    private final UpdateBeerByIdFeature updateBeerByIdFeature;
-    private final DeleteBeerByIdFeature deleteBeerByIdFeature;
+//    private final GetBeerByIdFeature getBeerByIdFeature;
+//    private final FindBeerByIdFeature findBeerByIdFeature;
+//    private final GetAllBeerFeature getAllBeerFeature;
+//    private final SaveBeerFeature saveBeerFeature;
+//    private final UpdateBeerByIdFeature updateBeerByIdFeature;
+//    private final DeleteBeerByIdFeature deleteBeerByIdFeature;
+
+    private final GetBeerByIdJpaFeature getBeerByIdFeature;
+    private final FindBeerByIdJpaFeature findBeerByIdFeature;
+    private final GetAllBeerJpaFeature getAllBeerFeature;
+    private final SaveBeerJpaFeature saveBeerFeature;
+    private final UpdateBeerByIdJpaFeature updateBeerByIdFeature;
+    private final DeleteBeerByIdJpaFeature deleteBeerByIdFeature;
 
     @PostMapping(BEER_PATH)
     public ResponseEntity<BeerDTO> handlePost(@RequestBody BeerDTO beer) {
         BeerDTO savedBeer = saveBeerFeature.execute(beer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", BeerController.BEER_PATH_ID + savedBeer.getId().toString());
+        headers.add("Location", BEER_PATH + "/" + savedBeer.getId().toString());
 
         return new ResponseEntity<>(savedBeer, headers, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = BEER_PATH_ID)
     public ResponseEntity<BeerDTO> handleDelete(@PathVariable("id") UUID id) {
-        deleteBeerByIdFeature.execute(id);
+        if (!deleteBeerByIdFeature.execute(id)) {
+            throw new NotFoundException();
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(value = BEER_PATH_ID)
     public ResponseEntity<BeerDTO> handlePut(@PathVariable("id") UUID id, @RequestBody BeerDTO beer) {
-        updateBeerByIdFeature.execute(id, beer);
+        if (updateBeerByIdFeature.execute(id, beer).isEmpty()) {
+            throw new NotFoundException();
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

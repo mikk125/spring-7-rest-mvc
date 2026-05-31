@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriBuilder;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,31 +21,44 @@ public class CustomerController {
     public static final String CUSTOMER_PATH_ID = "/api/v1/customer" + "/{id}";
     public static final String CUSTOMER_PATH_FIND = CUSTOMER_PATH_ID + "/find";
 
-    private final GetCustomerByIdFeature getCustomerByIdFeature;
-    private final FindCustomerByIdFeature findCustomerByIdFeature;
-    private final GetAllCustomerFeature getAllCustomerFeature;
-    private final SaveCustomerFeature saveCustomerFeature;
-    private final UpdateCustomerByIdFeature updateCustomerByIdFeature;
-    private final DeleteCustomerByIdFeature deleteCustomerByIdFeature;
+//    private final GetCustomerByIdFeature getCustomerByIdFeature;
+//    private final FindCustomerByIdFeature findCustomerByIdFeature;
+//    private final GetAllCustomerFeature getAllCustomerFeature;
+//    private final SaveCustomerFeature saveCustomerFeature;
+//    private final UpdateCustomerByIdFeature updateCustomerByIdFeature;
+//    private final DeleteCustomerByIdFeature deleteCustomerByIdFeature;
+
+    private final GetCustomerByIdJpaFeature getCustomerByIdFeature;
+    private final FindCustomerByIdJpaFeature findCustomerByIdFeature;
+    private final GetAllCustomerJpaFeature getAllCustomerFeature;
+    private final SaveCustomerJpaFeature saveCustomerFeature;
+    private final UpdateCustomerByIdJpaFeature updateCustomerByIdFeature;
+    private final DeleteCustomerByIdJpaFeature deleteCustomerByIdFeature;
 
     @PostMapping(CUSTOMER_PATH)
     public ResponseEntity<CustomerDTO> handlePost(@RequestBody CustomerDTO customer) {
         CustomerDTO savedCustomer = saveCustomerFeature.execute(customer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
+        headers.add("Location", CustomerController.CUSTOMER_PATH + "/" + savedCustomer.getId().toString());
 
         return new ResponseEntity<>(savedCustomer, headers, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = CUSTOMER_PATH_ID)
     public ResponseEntity<CustomerDTO> handleDelete(@PathVariable("id") UUID id) {
-        deleteCustomerByIdFeature.execute(id);
+        if (!deleteCustomerByIdFeature.execute(id)) {
+            throw new NotFoundException();
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(value = CUSTOMER_PATH_ID)
     public ResponseEntity<CustomerDTO> handlePut(@PathVariable("id") UUID id, @RequestBody CustomerDTO customer) {
-        updateCustomerByIdFeature.execute(id, customer);
+        if (updateCustomerByIdFeature.execute(id, customer).isEmpty()) {
+            throw new NotFoundException();
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

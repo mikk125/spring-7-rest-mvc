@@ -18,16 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 //@SpringBootTest
@@ -40,23 +33,41 @@ public class CustomerControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockitoBean
-    GetCustomerByIdFeature getCustomerByIdFeature;
+//    @MockitoBean
+//    GetCustomerByIdFeature getCustomerByIdFeature;
+//
+//    @MockitoBean
+//    GetAllCustomerFeature getAllCustomerFeature;
+//
+//    @MockitoBean
+//    SaveCustomerFeature saveCustomerFeature;
+//
+//    @MockitoBean
+//    UpdateCustomerByIdFeature updateCustomerByIdFeature;
+//
+//    @MockitoBean
+//    DeleteCustomerByIdFeature deleteCustomerByIdFeature;
+//
+//    @MockitoBean
+//    FindCustomerByIdFeature findCustomerByIdFeature;
 
     @MockitoBean
-    GetAllCustomerFeature getAllCustomerFeature;
+    GetCustomerByIdJpaFeature getCustomerByIdFeature;
 
     @MockitoBean
-    SaveCustomerFeature saveCustomerFeature;
+    GetAllCustomerJpaFeature getAllCustomerFeature;
 
     @MockitoBean
-    UpdateCustomerByIdFeature updateCustomerByIdFeature;
+    SaveCustomerJpaFeature saveCustomerFeature;
 
     @MockitoBean
-    DeleteCustomerByIdFeature deleteCustomerByIdFeature;
+    UpdateCustomerByIdJpaFeature updateCustomerByIdFeature;
 
     @MockitoBean
-    FindCustomerByIdFeature findCustomerByIdFeature;
+    DeleteCustomerByIdJpaFeature deleteCustomerByIdFeature;
+
+    @MockitoBean
+    FindCustomerByIdJpaFeature findCustomerByIdFeature;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -87,6 +98,8 @@ public class CustomerControllerTest {
         UUID id = UUID.randomUUID();
         CustomerDTO customer = CustomerDTO.builder().id(id).name("Robert Alice").build();
 
+        given(updateCustomerByIdFeature.execute(any(), any())).willReturn(Optional.of(customer));
+
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(String.valueOf(MediaType.APPLICATION_JSON))
                         .contentType(String.valueOf(MediaType.APPLICATION_JSON))
@@ -99,6 +112,8 @@ public class CustomerControllerTest {
     @Test
     void testDeleteCustomer() throws Exception {
         CustomerDTO customer = CustomerDTO.builder().id(UUID.randomUUID()).build();
+
+        given(deleteCustomerByIdFeature.execute(any())).willReturn(true);
 
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(String.valueOf(MediaType.APPLICATION_JSON)))

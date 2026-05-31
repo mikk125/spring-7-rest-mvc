@@ -18,16 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 //@SpringBootTest
@@ -40,23 +33,41 @@ public class BeerControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockitoBean
-    GetBeerByIdFeature getBeerByIdFeature;
+//    @MockitoBean
+//    GetBeerByIdFeature getBeerByIdFeature;
+//
+//    @MockitoBean
+//    GetAllBeerFeature getAllBeerFeature;
+//
+//    @MockitoBean
+//    SaveBeerFeature saveBeerFeature;
+//
+//    @MockitoBean
+//    UpdateBeerByIdFeature updateBeerByIdFeature;
+//
+//    @MockitoBean
+//    DeleteBeerByIdFeature deleteBeerByIdFeature;
+//
+//    @MockitoBean
+//    private FindBeerByIdFeature findBeerByIdFeature;
 
     @MockitoBean
-    GetAllBeerFeature getAllBeerFeature;
+    GetBeerByIdJpaFeature getBeerByIdFeature;
 
     @MockitoBean
-    SaveBeerFeature saveBeerFeature;
+    GetAllBeerJpaFeature getAllBeerFeature;
 
     @MockitoBean
-    UpdateBeerByIdFeature updateBeerByIdFeature;
+    SaveBeerJpaFeature saveBeerFeature;
 
     @MockitoBean
-    DeleteBeerByIdFeature deleteBeerByIdFeature;
+    UpdateBeerByIdJpaFeature updateBeerByIdFeature;
 
     @MockitoBean
-    private FindBeerByIdFeature findBeerByIdFeature;
+    DeleteBeerByIdJpaFeature deleteBeerByIdFeature;
+
+    @MockitoBean
+    private FindBeerByIdJpaFeature findBeerByIdFeature;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -75,9 +86,9 @@ public class BeerControllerTest {
         given(saveBeerFeature.execute(any(BeerDTO.class))).willReturn(beer);
 
         mockMvc.perform(post(BeerController.BEER_PATH)
-                .accept(String.valueOf(MediaType.APPLICATION_JSON))
-                .contentType(String.valueOf(MediaType.APPLICATION_JSON))
-                .content(objectMapper.writeValueAsString(beer)))
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON))
+                        .contentType(String.valueOf(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
@@ -86,6 +97,8 @@ public class BeerControllerTest {
     void testUpdateBeer() throws Exception {
         UUID id = UUID.randomUUID();
         BeerDTO beer = BeerDTO.builder().id(id).beerName("Saku").build();
+
+        given(updateBeerByIdFeature.execute(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(String.valueOf(MediaType.APPLICATION_JSON))
@@ -100,8 +113,10 @@ public class BeerControllerTest {
     void testDeleteBeer() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
+        given(deleteBeerByIdFeature.execute(any())).willReturn(true);
+
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
-                .accept(String.valueOf(MediaType.APPLICATION_JSON)))
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isNoContent());
 
         ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);
@@ -119,7 +134,7 @@ public class BeerControllerTest {
         given(getBeerByIdFeature.execute(beer.getId())).willReturn(beer);
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, beer.getId())
-                .accept(String.valueOf(MediaType.APPLICATION_JSON)))
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(String.valueOf(MediaType.APPLICATION_JSON)))
                 .andExpect(jsonPath("$.id", is(beer.getId().toString())))
@@ -167,7 +182,7 @@ public class BeerControllerTest {
         given(getAllBeerFeature.execute()).willReturn(List.of(beer));
 
         mockMvc.perform(get(BeerController.BEER_PATH)
-                .accept(String.valueOf(MediaType.APPLICATION_JSON)))
+                        .accept(String.valueOf(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(String.valueOf(MediaType.APPLICATION_JSON)))
                 .equals(jsonPath("$.length()", is(1)));
