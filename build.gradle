@@ -13,6 +13,25 @@ ext {
     lombokVersion = '1.18.38'
 }
 
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/integrationTest/java'
+        }
+        resources {
+            srcDir 'src/integrationTest/resources'
+        }
+
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
@@ -27,6 +46,11 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    testImplementation platform('org.testcontainers:testcontainers-bom:1.20.1')
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:mysql"
+    runtimeOnly "org.springframework.boot:spring-boot-docker-compose"
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.flywaydb:flyway-mysql'
     testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
@@ -50,6 +74,20 @@ tasks.withType(JavaCompile).configureEach {
             '-parameters'
     ]
 }
+
+tasks.register('integrationTest', Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    shouldRunAfter test
+
+    useJUnitPlatform()
+}
+
+check.dependsOn integrationTest
 
 tasks.named('test') {
     useJUnitPlatform()

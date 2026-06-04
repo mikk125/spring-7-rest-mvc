@@ -10,7 +10,7 @@ create table beer (
                       version integer,
                       created_date datetime(6),
                       updated_date datetime(6),
-                      id varchar(35) not null,
+                      id varchar(36) not null,
                       beer_name varchar(50) not null,
                       upc varchar(255),
                       primary key (id)

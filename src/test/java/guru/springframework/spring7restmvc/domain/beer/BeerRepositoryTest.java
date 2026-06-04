@@ -1,7 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
 import jakarta.validation.ConstraintViolationException;
-import org.h2.util.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
