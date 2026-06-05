@@ -63,8 +63,8 @@ public class BeerController {
 
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDTO> listBeers() {
-        return getAllBeerFeature.execute();
+    public List<BeerDTO> listBeers(@RequestParam(required = false)  String beerName) {
+        return getAllBeerFeature.execute(beerName);
     }
 
     @GetMapping(BEER_PATH_FIND)

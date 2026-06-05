@@ -1,7 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
-import guru.springframework.spring7restmvc.domain.customer.CustomerController;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -10,9 +9,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import tools.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MediaType;
 
 import java.util.List;
 import java.util.Optional;
@@ -204,7 +201,7 @@ public class BeerControllerTest {
     void getAllBeer() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
-        given(getAllBeerFeature.execute()).willReturn(List.of(beer));
+        given(getAllBeerFeature.execute(beer.getBeerName())).willReturn(List.of(beer));
 
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .accept(String.valueOf(MediaType.APPLICATION_JSON)))
