@@ -21,16 +21,22 @@ public class UpdateBeerByIdJpaFeature {
     private final BeerMapper beerMapper;
 
     public Optional<BeerDTO> execute(UUID id, BeerDTO beer) {
-        AtomicReference<Optional<BeerDTO>> result = new AtomicReference<>();
+        return Optional.of(beerMapper.beerToBeerDto(
+                beerRepository.save(beerMapper.beerDtoToBeer(beer))
+        ));
 
-        beerRepository.findById(id).ifPresentOrElse(fB -> {
-            fB.setBeerName(beer.getBeerName());
-            fB.setBeerStyle(beer.getBeerStyle());
-            fB.setUpc(beer.getUpc());
-            fB.setPrice(beer.getPrice());
-            result.set(Optional.of(beerMapper.beerToBeerDto(beerRepository.save(fB))));
-        }, () -> result.set(Optional.empty()));
-
-        return result.get();
+//        AtomicReference<Optional<BeerDTO>> result = new AtomicReference<>();
+//
+//        beerRepository.findById(id).ifPresentOrElse(fB -> {
+//            fB.setBeerName(beer.getBeerName());
+//            fB.setBeerStyle(beer.getBeerStyle());
+//            fB.setUpc(beer.getUpc());
+//            fB.setPrice(beer.getPrice());
+//            fB.setQuantityOnHand(beer.getQuantityOnHand());
+//            fB.setVersion(beer.getVersion());
+//            result.set(Optional.of(beerMapper.beerToBeerDto(beerRepository.save(fB))));
+//        }, () -> result.set(Optional.empty()));
+//
+//        return result.get();
     }
 }
