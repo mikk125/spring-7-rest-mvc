@@ -4,8 +4,10 @@ import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -126,9 +129,9 @@ public class BeerControllerIT {
 
     @Test
     void testListBeers() {
-        List<BeerDTO> dtos = beerController.listBeers(null);
+        Page<BeerDTO> dtos = beerController.listBeers(any(), any(), any(), any());
 
-        assertThat(dtos.size()).isEqualTo(2413);
+        assertThat(dtos.stream().count()).isEqualTo(2413);
     }
 
     @Rollback
@@ -137,8 +140,8 @@ public class BeerControllerIT {
     void testEmptyList() {
         beerRepository.deleteAll();
 
-        List<BeerDTO> dtos = beerController.listBeers(null);
+        Page<BeerDTO> dtos = beerController.listBeers(any(), any(), any(), any());
 
-        assertThat(dtos.size()).isEqualTo(0);
+        assertThat(dtos.getContent().size()).isEqualTo(0);
     }
 }

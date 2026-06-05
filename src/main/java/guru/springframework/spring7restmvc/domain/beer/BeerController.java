@@ -3,6 +3,7 @@ package guru.springframework.spring7restmvc.domain.beer;
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,8 +64,11 @@ public class BeerController {
 
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false)  String beerName) {
-        return getAllBeerFeature.execute(beerName);
+    public Page<BeerDTO> listBeers(@RequestParam(required = false)  String beerName,
+                                   @RequestParam(required = false) Boolean showInventory,
+                                   @RequestParam(required = false) Integer pageNumber,
+                                   @RequestParam(required = false) Integer pageSize) {
+        return getAllBeerFeature.execute(beerName, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(BEER_PATH_FIND)

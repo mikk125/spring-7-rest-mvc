@@ -1,5 +1,7 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface BeerRepository extends JpaRepository<Beer, UUID> {
 
-    List<Beer> findAllByBeerNameIsLikeIgnoreCase(String beerName);
+    Page<Beer> findAllByBeerNameIsLikeIgnoreCase(String beerName, Pageable pageable);
 }

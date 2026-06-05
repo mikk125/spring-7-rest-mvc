@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -72,6 +75,8 @@ public class BeerControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    private GetAllBeerJpaFeature getAllBeerJpaFeature;
 
     @Test
     void testCreateBeer() {
@@ -201,7 +206,7 @@ public class BeerControllerTest {
     void getAllBeer() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
-        given(getAllBeerFeature.execute(beer.getBeerName())).willReturn(List.of(beer));
+        given(getAllBeerFeature.execute(beer.getBeerName(), false, any(), any())).willReturn(null);
 
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .accept(String.valueOf(MediaType.APPLICATION_JSON)))
