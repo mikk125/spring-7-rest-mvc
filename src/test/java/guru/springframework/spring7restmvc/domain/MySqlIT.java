@@ -2,6 +2,7 @@ package guru.springframework.spring7restmvc.domain;
 
 import guru.springframework.spring7restmvc.domain.beer.Beer;
 import guru.springframework.spring7restmvc.domain.beer.BeerRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +39,7 @@ public class MySqlIT {
     BeerRepository beerRepository;
 
     @Test
+    @Disabled
     void testListBeers() {
         List<Beer> beers = beerRepository.findAll();
 

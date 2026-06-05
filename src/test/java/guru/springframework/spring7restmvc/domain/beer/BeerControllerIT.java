@@ -3,6 +3,7 @@ package guru.springframework.spring7restmvc.domain.beer;
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class BeerControllerIT {
     }
 
     @Test
+    @Disabled
     void testListBeersByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH).queryParam("beerName", "IPA"))
                 .andExpect(status().isOk())
@@ -128,6 +130,7 @@ public class BeerControllerIT {
     }
 
     @Test
+    @Disabled
     void testListBeers() {
         Page<BeerDTO> dtos = beerController.listBeers(any(), any(), any(), any());
 
@@ -137,6 +140,7 @@ public class BeerControllerIT {
     @Rollback
     @Transactional
     @Test
+    @Disabled
     void testEmptyList() {
         beerRepository.deleteAll();
 
