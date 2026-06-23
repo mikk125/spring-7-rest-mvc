@@ -80,7 +80,6 @@ public class BeerControllerTest {
     private GetAllBeerJpaFeature getAllBeerJpaFeature;
 
     @Test
-    @Disabled
     void testCreateBeer() {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
@@ -88,7 +87,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void testCreateNewBeer() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).beerName("Saku").build();
 
@@ -103,7 +101,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void testUpdateBeer() throws Exception {
         UUID id = UUID.randomUUID();
         BeerDTO beer = BeerDTO.builder().id(id).beerName("Saku").build();
@@ -120,7 +117,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void testDeleteBeer() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
@@ -139,7 +135,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void getBeerById() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
@@ -156,7 +151,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void getBeerByIdNotFound() throws Exception {
         given(getBeerByIdFeature.execute(any(UUID.class))).willThrow(NotFoundException.class);
 
@@ -165,7 +159,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void findBeerById() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 
@@ -182,7 +175,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void findBeerByIdNotFound() throws Exception {
         given(findBeerByIdFeature.execute(any(UUID.class))).willReturn(Optional.empty());
 
@@ -191,7 +183,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void testCreateBeerNullBeerName() throws Exception {
         BeerDTO beerDTO = BeerDTO.builder().build();
 
@@ -213,7 +204,6 @@ public class BeerControllerTest {
     }
 
     @Test
-    @Disabled
     void getAllBeer() throws Exception {
         BeerDTO beer = BeerDTO.builder().id(UUID.randomUUID()).build();
 

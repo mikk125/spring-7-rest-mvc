@@ -24,7 +24,6 @@ public class BeerRepositoryTest {
     BeerRepository beerRepository;
 
     @Test
-    @Disabled
     void testGetBeerListByName() {
         Page<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%", PageRequest.of(0, 100));
 

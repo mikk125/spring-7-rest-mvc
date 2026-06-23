@@ -50,7 +50,6 @@ public class BeerControllerIT {
     }
 
     @Test
-    @Disabled
     void testListBeersByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH).queryParam("beerName", "IPA"))
                 .andExpect(status().isOk())
@@ -84,7 +83,7 @@ public class BeerControllerIT {
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
         beerDTO.setId(null);
         beerDTO.setVersion(null);
-        final String beerName = "Updated";
+        final String beerName = "Saku";
         beerDTO.setBeerName(beerName);
 
         ResponseEntity responseEntity = beerController.handlePut(beer.getId(), beerDTO);
@@ -130,7 +129,6 @@ public class BeerControllerIT {
     }
 
     @Test
-    @Disabled
     void testListBeers() {
         Page<BeerDTO> dtos = beerController.listBeers(any(), any(), any(), any());
 
@@ -140,7 +138,6 @@ public class BeerControllerIT {
     @Rollback
     @Transactional
     @Test
-    @Disabled
     void testEmptyList() {
         beerRepository.deleteAll();
 

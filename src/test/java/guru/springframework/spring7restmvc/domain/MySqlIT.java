@@ -39,7 +39,6 @@ public class MySqlIT {
     BeerRepository beerRepository;
 
     @Test
-    @Disabled
     void testListBeers() {
         List<Beer> beers = beerRepository.findAll();
 
