@@ -12,6 +12,7 @@ ext {
     mapstructVersion = '1.5.2.Final'
     lombokVersion = '1.18.38'
     logbookVersion = '4.0.4'
+    logstashLogbackEncoderVersion = '7.4'
 }
 
 sourceSets {
@@ -63,6 +64,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "net.logstash.logback:logstash-logback-encoder:${logstashLogbackEncoderVersion}"
+    implementation "org.zalando:logbook-logstash:${logbookVersion}"
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'com.atlassian.oai:swagger-request-validator-restassured:2.32.0'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
