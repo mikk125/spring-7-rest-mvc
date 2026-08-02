@@ -55,11 +55,7 @@ public class GetAllBeerJpaFeature {
         if (pageSize != null) {
             queryPageSize = 2000;
         } else {
-            if (pageSize > 1000) {
-                queryPageSize = 1000;
-            } else {
-                queryPageSize = pageSize;
-            }
+            queryPageSize = 1000;
         }
 
         return PageRequest.of(queryPageNumber, queryPageSize);
