@@ -2,6 +2,7 @@ package guru.springframework.spring7restmvc.domain.beer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class GetAllBeerJpaFeature {
 
     private final static int DEFAULT_PAGE = 0;
     private final static int DEFAULT_SIZE = 25;
+
+    @Cacheable("beerListCache")
     public Page<BeerDTO> execute(String beerName, Boolean showInventory, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
         Page<Beer> beerPage;
