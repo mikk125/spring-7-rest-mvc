@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
+import guru.springframework.spring6restmvcapi.model.BeerDTO;
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import guru.springframework.spring7restmvc.domain.customer.CustomerDTO;
 import lombok.RequiredArgsConstructor;

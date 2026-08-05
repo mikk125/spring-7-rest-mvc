@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.common.bootstrap;
 
+import guru.springframework.spring6restmvcapi.model.BeerStyle;
 import guru.springframework.spring7restmvc.domain.beer.*;
 import guru.springframework.spring7restmvc.domain.customer.Customer;
 import guru.springframework.spring7restmvc.domain.customer.CustomerRepository;
@@ -17,7 +18,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static guru.springframework.spring7restmvc.domain.beer.BeerStyle.ALE;
 
 @Component
 @RequiredArgsConstructor

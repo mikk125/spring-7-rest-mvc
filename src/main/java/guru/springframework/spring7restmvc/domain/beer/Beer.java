@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
+import guru.springframework.spring6restmvcapi.model.BeerStyle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

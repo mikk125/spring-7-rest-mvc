@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer;
 
+import guru.springframework.spring6restmvcapi.model.BeerDTO;
 import guru.springframework.spring7restmvc.domain.event.BeerCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
