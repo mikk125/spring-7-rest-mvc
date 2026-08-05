@@ -1,6 +1,7 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class GetAllCustomerFeature {
                 .version(1)
                 .name("Maiki")
                 .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
                 .build();
 
         customers.put(customer1.getId(), customer1);

@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class SaveCustomerFeature {
                 .version(customer.getVersion())
                 .name(customer.getName())
                 .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
                 .build();
 
         log.debug("Saving customer feature was called");

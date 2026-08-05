@@ -1,7 +1,6 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
-import guru.springframework.spring7restmvc.domain.customer.Customer;
-import guru.springframework.spring7restmvc.domain.customer.CustomerDTO;
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import org.mapstruct.Mapper;
 
 @Mapper

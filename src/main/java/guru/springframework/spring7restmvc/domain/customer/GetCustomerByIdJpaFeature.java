@@ -1,6 +1,7 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import guru.springframework.spring7restmvc.domain.beer.Beer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,6 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
-import guru.springframework.spring7restmvc.domain.customer.CustomerController;
-import guru.springframework.spring7restmvc.domain.customer.CustomerDTO;
 import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
