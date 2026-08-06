@@ -1,7 +1,10 @@
 package guru.springframework.spring7restmvc.domain.listener;
 
 import guru.springframework.spring6restmvcapi.events.OrderPlacedEvent;
+import guru.springframework.spring6restmvcapi.model.BeerDTO;
 import guru.springframework.spring6restmvcapi.model.BeerOrderDTO;
+import guru.springframework.spring6restmvcapi.model.BeerOrderLineDTO;
+import guru.springframework.spring6restmvcapi.model.BeerStyle;
 import guru.springframework.spring7restmvc.common.config.KafkaConfig;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,10 +18,15 @@ import org.springframework.kafka.test.utils.ContainerTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestConstructor;
 
+import java.sql.Time;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -28,6 +36,12 @@ class OrderPlacedListenerTest {
 
     @Autowired
     private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
+
+    @Autowired
+    DrinkSplitterRouter drinkSplitter;
+
+    @Autowired
+    DrinkListenerKafkaConsumer drinkListenerKafkaConsumer;
 
     @Autowired
     private OrderPlacedKafkaListener orderPlacedKafkaListener;
@@ -43,6 +57,22 @@ class OrderPlacedListenerTest {
     }
 
     @Test
+    void listenSplitter() {
+        drinkSplitter.receive(OrderPlacedEvent.builder()
+                .beerOrderDTO(buildOrder())
+                .build());
+
+        await().atMost(15, TimeUnit.SECONDS).pollDelay(100, TimeUnit.MICROSECONDS)
+                .until(drinkListenerKafkaConsumer.iceColdMessageCounter::get, greaterThan(0));
+
+        await().atMost(15, TimeUnit.SECONDS).pollDelay(100, TimeUnit.MICROSECONDS)
+                .until(drinkListenerKafkaConsumer.coldMessageCounter::get, greaterThan(0));
+
+        await().atMost(15, TimeUnit.SECONDS).pollDelay(100, TimeUnit.MICROSECONDS)
+                .until(drinkListenerKafkaConsumer.coolMessageCounter::get, greaterThan(0));
+    }
+
+    @Test
     void listen() {
         OrderPlacedEvent orderPlacedEvent = OrderPlacedEvent.builder().beerOrderDTO(BeerOrderDTO.builder()
                 .id(UUID.randomUUID())
@@ -53,5 +83,38 @@ class OrderPlacedListenerTest {
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             assertEquals(1, orderPlacedKafkaListener.messageCounter.get());
         });
+    }
+
+    BeerOrderDTO buildOrder() {
+        Set<BeerOrderLineDTO> beerOrderLines = new HashSet<>();
+
+        beerOrderLines.add(BeerOrderLineDTO.builder()
+                .beer(BeerDTO.builder()
+                        .id(UUID.randomUUID())
+                        .beerStyle(BeerStyle.IPA)
+                        .beerName("Test Beer")
+                        .build())
+                .build());
+
+        beerOrderLines.add(BeerOrderLineDTO.builder()
+                .beer(BeerDTO.builder()
+                        .id(UUID.randomUUID())
+                        .beerStyle(BeerStyle.LAGER)
+                        .beerName("Test Beer")
+                        .build())
+                .build());
+
+        beerOrderLines.add(BeerOrderLineDTO.builder()
+                .beer(BeerDTO.builder()
+                        .id(UUID.randomUUID())
+                        .beerStyle(BeerStyle.GOSE)
+                        .beerName("Test Beer")
+                        .build())
+                .build());
+
+        return BeerOrderDTO.builder()
+                .id(UUID.randomUUID())
+                .beerOrderLines(beerOrderLines)
+                .build();
     }
 }
