@@ -1,12 +1,11 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
-import guru.springframework.spring7restmvc.domain.beer.BeerOrder;
+import guru.springframework.spring7restmvc.domain.beer_order.BeerOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.IdGeneratorType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;

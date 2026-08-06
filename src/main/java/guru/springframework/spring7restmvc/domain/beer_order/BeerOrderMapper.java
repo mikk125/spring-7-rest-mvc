@@ -1,0 +1,26 @@
+package guru.springframework.spring7restmvc.domain.beer_order;
+
+
+import guru.springframework.spring6restmvcapi.model.BeerOrderDTO;
+import guru.springframework.spring6restmvcapi.model.BeerOrderLineDTO;
+import guru.springframework.spring6restmvcapi.model.BeerOrderShipmentDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper
+public interface BeerOrderMapper {
+
+    @Mapping(target="beerOrder", ignore=true)
+    BeerOrderShipment beerOrderShipmentDtoToBeerOrderShipment(BeerOrderShipmentDTO beerOrderShipmentDTO);
+
+    BeerOrderShipmentDTO beerOrderShipmentToBeerOrderShipmentDto(BeerOrderShipment beerOrderShipment);
+
+    @Mapping(target="beerOrder", ignore=true)
+    BeerOrderLine beerOrderLineDtoToBeerOrderLine(BeerOrderLineDTO beerOrderLineDTO);
+
+    BeerOrderLineDTO beerOrderLineToBeerOrderLineDto(BeerOrderLine beerOrderLine);
+
+    BeerOrder beerOrderDtoToBeerOrder(BeerOrderDTO beerOrderDTO);
+
+    BeerOrderDTO beerOrderToBeerOrderDto(BeerOrder beerOrder);
+}
