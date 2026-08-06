@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.customer;
 
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;

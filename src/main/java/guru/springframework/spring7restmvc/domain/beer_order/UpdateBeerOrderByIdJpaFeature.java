@@ -1,5 +1,6 @@
 package guru.springframework.spring7restmvc.domain.beer_order;
 
+import guru.springframework.spring6restmvcapi.events.OrderPlacedEvent;
 import guru.springframework.spring6restmvcapi.model.BeerOrderDTO;
 import guru.springframework.spring6restmvcapi.model.BeerOrderUpdateDTO;
 import guru.springframework.spring7restmvc.common.exception.NotFoundException;
@@ -7,6 +8,7 @@ import guru.springframework.spring7restmvc.domain.beer.BeerRepository;
 import guru.springframework.spring7restmvc.domain.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,6 +21,7 @@ public class UpdateBeerOrderByIdJpaFeature {
     private final CustomerRepository customerRepository;
     private final BeerRepository beerRepository;
     private final BeerOrderMapper beerOrderMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public BeerOrderDTO execute(UUID beerOrderid, BeerOrderUpdateDTO beerOrderUpdateDTO) {
         val order = beerOrderRepository.findById(beerOrderid).orElseThrow(NotFoundException::new);
@@ -52,6 +55,14 @@ public class UpdateBeerOrderByIdJpaFeature {
             }
         }
 
-        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
+        BeerOrderDTO dto = beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
+
+        if (beerOrderUpdateDTO.getPaymentAmount() != null) {
+            applicationEventPublisher.publishEvent(OrderPlacedEvent.builder()
+                    .beerOrderDTO(dto)
+                    .build());
+        }
+
+        return dto;
     }
 }
