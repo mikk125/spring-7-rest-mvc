@@ -9,6 +9,10 @@ import org.hibernate.type.SqlTypes;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import guru.springframework.spring6restmvcapi.model.BeerOrderLineStatus;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+
 /**
  * Created by jt on 2019-01-26.
  */
@@ -47,6 +51,11 @@ public class BeerOrderLine {
     @ManyToOne
     private Beer beer;
 
-    private Integer orderQuantity = 0;
+    @Min(value = 1, message = "Quantity On Hand must be greater than 0")
+    private Integer orderQuantity = 1;
     private Integer quantityAllocated = 0;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private BeerOrderLineStatus orderLineStatus = BeerOrderLineStatus.NEW;
 }
